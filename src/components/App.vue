@@ -6,6 +6,7 @@ export default {
         return {
             backgroundImageUrl: "https://source.unsplash.com/random/?ocean",
             game: {},
+            loaded: false,
             startBoard: {
                 board: [
                     [ 4, 2, 0, 0, 3, 0, 1, 0, 7 ],
@@ -36,15 +37,12 @@ export default {
     },
 
     methods: {
-        log(message) {
-            alert(message)
-        },
-
         deepCopy(arr) {
             return JSON.parse(JSON.stringify(arr))
         },
 
         fetchGetNewPuzzle() {
+            this.loaded = false
             fetch("https://sudoku-api.vercel.app/api/dosuku")
                 .then( (httpResponse) => httpResponse.json() )
                 .then( (responseData) => {
@@ -52,6 +50,7 @@ export default {
                      this.startBoard.solution = responseData.newboard.grids[0].solution
                      this.startBoard.difficulty = responseData.newboard.grids[0].difficulty
                      this.game = this.deepCopy(this.startBoard)
+                     this.loaded = true
                     } )
         },
 
@@ -160,7 +159,23 @@ export default {
         <span class="header-text">Vuedoku</span>
     </header>
 
-    <main>
+    <loading v-if="!loaded">
+        <div class="loader"></div>
+    </loading>
+
+    <menubar v-if="loaded">
+        <div id="controls">
+            <div class="controls-button" @click="fetchGetNewPuzzle()">
+                New puzzle
+            </div>
+            <div class="difficulty">{{ game.difficulty }}</div>
+            <div class="controls-button" @click="resetPuzzle()">
+                Reset puzzle
+            </div>
+        </div>
+    </menubar>
+
+    <main v-if="loaded">
         <div class="board-container">
     
             <div id="grid-container" class="d-flex flex-column">
@@ -193,15 +208,6 @@ export default {
                 Clear
             </div>
         </div>
-        <div id="controls">
-            <div class="difficulty">{{ game.difficulty }}</div>
-            <div class="controls-button" @click="fetchGetNewPuzzle()">
-                New puzzle
-            </div>
-            <div class="controls-button" @click="resetPuzzle()">
-                Reset puzzle
-            </div>
-        </div>
     </main>
 </template>
 
@@ -210,7 +216,7 @@ export default {
 header {
     padding-top: 2em;
     padding-bottom: 2em;
-    margin-bottom: 2em;
+    margin-bottom: 0.5em;
     text-align: center;
     background-color: white;
     background-position: center;
@@ -330,9 +336,16 @@ main {
     width: 10.2em;
 }
 
+menubar {
+ display: flex;
+ justify-content: center;
+ margin-bottom: 0.25em;
+}
+
 #controls {
-    margin: 2vw;
-    width: 12em;
+    display: flex;
+    justify-content: space-between;
+    width: 95vw;
 }
 
 .difficulty {
@@ -340,6 +353,12 @@ main {
     font-size: 2em;
     text-align: center;
     margin: 0.25em;
+}
+
+loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .controls-button {
@@ -351,10 +370,25 @@ main {
     margin: 0.2em;
     border-radius: 0.25em;
     cursor: pointer;
+    text-align: center;
 }
 
 .controls-button:hover {
     background-color: rgb(218, 218, 218);
+}
+
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 </style>
