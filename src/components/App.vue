@@ -199,6 +199,7 @@ export default {
             <div v-for="index in 9">
                 <div class="input-button" @click="enterInSelectedCell(index)" :class="{'input-button-disabled': countInstances[index] >= 9}">
                     {{ index }}
+                    <span class="input-button-count">{{ 9 - countInstances[index] }}</span>
                 </div>
             </div>
             <div class="input-button clear-button" @click="enterInSelectedCell(0)">
@@ -219,6 +220,7 @@ header {
     background-position: center;
     background-size: cover;
     width: 100vw;
+    border-bottom: 1px solid #5c5c5c;
 }
 .header-text {
     font-size: calc(1.625rem + 4.5vw);
@@ -324,6 +326,7 @@ main {
     margin: 0.2em;
     border-radius: 0.25em;
     cursor: pointer;
+    position: relative;
 }
 
 .input-button:hover {
@@ -332,6 +335,14 @@ main {
 
 .input-button-disabled {
     visibility: hidden;
+}
+
+.input-button-count {
+    font-size: 0.7em;
+    color: rgb(180, 180, 180);
+    position: absolute;
+    bottom: 0.3em;
+    right: 0.3em;
 }
 
 .clear-button {
