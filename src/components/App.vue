@@ -5,37 +5,59 @@ export default {
     data() {
         return {
             backgroundImageUrl: "https://source.unsplash.com/random/?ocean",
-            gameBoard: [],
-            startBoard: [
-                [ 4, 2, 0, 0, 3, 0, 1, 0, 7 ],
-                [ 3, 0, 5, 6, 0, 8, 0, 0, 2 ],
-                [ 0, 0, 0, 0, 7, 2, 0, 6, 5 ],
-                [ 0, 6, 9, 8, 0, 0, 0, 0, 3 ],
-                [ 7, 1, 0, 2, 0, 0, 4, 9, 6 ],
-                [ 0, 0, 3, 9, 6, 0, 0, 2, 0 ],
-                [ 0, 0, 0, 0, 2, 4, 8, 0, 0 ],
-                [ 1, 0, 0, 7, 8, 0, 6, 0, 0 ],
-                [ 0, 5, 4, 0, 0, 0, 0, 0, 1 ]
-            ],
+            game: {},
+            startBoard: {
+                board: [
+                    [ 4, 2, 0, 0, 3, 0, 1, 0, 7 ],
+                    [ 3, 0, 5, 6, 0, 8, 0, 0, 2 ],
+                    [ 0, 0, 0, 0, 7, 2, 0, 6, 5 ],
+                    [ 0, 6, 9, 8, 0, 0, 0, 0, 3 ],
+                    [ 7, 1, 0, 2, 0, 0, 4, 9, 6 ],
+                    [ 0, 0, 3, 9, 6, 0, 0, 2, 0 ],
+                    [ 0, 0, 0, 0, 2, 4, 8, 0, 0 ],
+                    [ 1, 0, 0, 7, 8, 0, 6, 0, 0 ],
+                    [ 0, 5, 4, 0, 0, 0, 0, 0, 1 ]
+                ],
+                solution: [
+                    [ 4, 2, 6, 5, 3, 9, 1, 8, 7 ],
+                    [ 3, 7, 5, 6, 1, 8, 9, 4, 2 ],
+                    [ 9, 8, 1, 4, 7, 2, 3, 6, 5 ],
+                    [ 2, 6, 9, 8, 4, 7, 5, 1, 3 ],
+                    [ 7, 1, 8, 2, 5, 3, 4, 9, 6 ],
+                    [ 5, 4, 3, 9, 6, 1, 7, 2, 8 ],
+                    [ 6, 3, 7, 1, 2, 4, 8, 5, 9 ],
+                    [ 1, 9, 2, 7, 8, 5, 6, 3, 4 ],
+                    [ 8, 5, 4, 3, 9, 6, 2, 7, 1 ]
+                ],
+                difficulty: "Easy"
+            },
             selectedCell: {x: 0, y: 0}
         }
     },
 
     methods: {
+        log(message) {
+            alert(message)
+        },
+
         deepCopy(arr) {
             return JSON.parse(JSON.stringify(arr))
         },
 
-        // countInstances(number) {
-        //     let boardString = ""
-        //     for (const row in this.gameBoard) {
-        //         for (const col in this.gameBoard[row]) {
-        //             boardString += String(this.gameBoard[row, col])
-        //         }
-        //     }
+        fetchGetNewPuzzle() {
+            fetch("https://sudoku-api.vercel.app/api/dosuku")
+                .then( (httpResponse) => httpResponse.json() )
+                .then( (responseData) => {
+                     this.startBoard.board = responseData.newboard.grids[0].value
+                     this.startBoard.solution = responseData.newboard.grids[0].solution
+                     this.startBoard.difficulty = responseData.newboard.grids[0].difficulty
+                     this.game = this.deepCopy(this.startBoard)
+                    } )
+        },
 
-        //     return boardString.match(`/${number}/g`)
-        // },
+        resetPuzzle() {
+            this.game.board = this.deepCopy(this.startBoard.board)
+        },
 
         cellInSelectedRow(x) {
             return x == this.selectedCell.x
@@ -57,7 +79,7 @@ export default {
         },
 
         cellContentSameAsSelected(x, y) {
-            return this.gameBoard[y][x] > 0 && this.gameBoard[y][x] == this.gameBoard[this.selectedCell.y][this.selectedCell.x]
+            return this.game.board[y][x] > 0 && this.game.board[y][x] == this.game.board[this.selectedCell.y][this.selectedCell.x]
         },
 
         cellContentAlreadyInLine(x, y) {
@@ -65,23 +87,23 @@ export default {
         },
 
         cellEditable(x, y) {
-            return this.startBoard[y][x] == 0
+            return this.startBoard.board[y][x] == 0
         },
 
         isCellValid(x, y) {
-            const numberToCheck = this.gameBoard[y][x]
+            const numberToCheck = this.game.board[y][x]
 
             if (numberToCheck == 0) return true
 
-            for (const col in this.gameBoard[y]) {
-                const value = this.gameBoard[y][col]
+            for (const col in this.game.board[y]) {
+                const value = this.game.board[y][col]
                 if ( col != x && value == numberToCheck ) {
                     return false
                 }
             }
 
-            for (const row in this.gameBoard) {
-                const value = this.gameBoard[row][x]
+            for (const row in this.game.board) {
+                const value = this.game.board[row][x]
                 if (row != y && value == numberToCheck) {
                     return false
                 }
@@ -92,7 +114,7 @@ export default {
 
             for (let row = sqStarty; row <= sqStarty + 2; row++) {
                 for (let col = sqStartx; col <= sqStartx + 2; col++) {
-                    const value = this.gameBoard[row][col]
+                    const value = this.game.board[row][col]
                     if ( (row != y && col != x) && value == numberToCheck) {
                         return false
                     }
@@ -104,7 +126,7 @@ export default {
 
         enterInSelectedCell(value) {
             if (this.cellEditable(this.selectedCell.x, this.selectedCell.y)) {
-                this.gameBoard[this.selectedCell.y][this.selectedCell.x] = value
+                this.game.board[this.selectedCell.y][this.selectedCell.x] = value
             }
         }
     },
@@ -116,10 +138,10 @@ export default {
 
         countInstances() {
             let instances = [0,0,0,0,0,0,0,0,0,0]
-            for (const row in this.gameBoard) {
-                for (const col in this.gameBoard[row]) {
-                    instances[this.gameBoard[row][col]] += 1
-                    // boardString += String(this.gameBoard[row, col])
+            for (const row in this.game.board) {
+                for (const col in this.game.board[row]) {
+                    instances[this.game.board[row][col]] += 1
+                    // boardString += String(this.game.board[row, col])
                 }
             }
             return instances
@@ -127,7 +149,8 @@ export default {
     },
 
     mounted() {
-        this.gameBoard = this.deepCopy(this.startBoard);
+        // this.game = this.deepCopy(this.startBoard);
+        this.fetchGetNewPuzzle()
     }
 }
 </script>
@@ -141,7 +164,7 @@ export default {
         <div class="board-container">
     
             <div id="grid-container" class="d-flex flex-column">
-                <div class="board-row" v-for="(row, y) in gameBoard">
+                <div class="board-row" v-for="(row, y) in game.board">
                     <div
                         class="board-cell d-flex justify-content-center align-items-center"
                         :class="{
@@ -154,7 +177,7 @@ export default {
                         v-for="(cell, x) in row"
                         @click="selectedCell = {x: x, y: y}"
                     >
-                        <span v-show="!gameBoard[y][x] == 0">{{ gameBoard[y][x] }}</span>
+                        <span v-show="!game.board[y][x] == 0">{{ game.board[y][x] }}</span>
                     </div>
                 </div>
             </div>
@@ -168,6 +191,15 @@ export default {
             </div>
             <div class="input-button clear-button" @click="enterInSelectedCell(0)">
                 Clear
+            </div>
+        </div>
+        <div id="controls">
+            <div class="difficulty">{{ game.difficulty }}</div>
+            <div class="controls-button" @click="fetchGetNewPuzzle()">
+                New puzzle
+            </div>
+            <div class="controls-button" @click="resetPuzzle()">
+                Reset puzzle
             </div>
         </div>
     </main>
@@ -198,10 +230,12 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
 }
 .board-container {
     display: flex;
     justify-content: center;
+    margin: 2vw;
 }
 .board-row {
     display: flex;
@@ -268,6 +302,8 @@ main {
     flex-wrap: wrap;
     width: 12em;
     height: fit-content;
+    justify-content: center;
+    align-items: center;
 }
 
 .input-button {
@@ -292,6 +328,33 @@ main {
 
 .clear-button {
     width: 10.2em;
+}
+
+#controls {
+    margin: 2vw;
+    width: 12em;
+}
+
+.difficulty {
+    font-weight: 600;
+    font-size: 2em;
+    text-align: center;
+    margin: 0.25em;
+}
+
+.controls-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5em;
+    border: 0.1em solid grey;
+    margin: 0.2em;
+    border-radius: 0.25em;
+    cursor: pointer;
+}
+
+.controls-button:hover {
+    background-color: rgb(218, 218, 218);
 }
 
 </style>
