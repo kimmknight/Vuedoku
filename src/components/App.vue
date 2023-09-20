@@ -4,7 +4,7 @@ export default {
 
     data() {
         return {
-            backgroundImageUrl: "https://source.unsplash.com/random/?ocean",
+            backgroundImageUrl: "url(https://source.unsplash.com/random/?ocean)",
             game: {},
             loaded: false,
             startBoard: {
@@ -58,23 +58,23 @@ export default {
             this.game.board = this.deepCopy(this.startBoard.board)
         },
 
-        cellInSelectedRow(x) {
+        numberAlreadyInRow(x) {
             return x == this.selectedCell.x
         },
 
 
-        cellInSelectedCol(y) {
+        numberAlreadyInCol(y) {
             return y == this.selectedCell.y
         },
 
-        cellInSelectedSquare(x, y) {
-            const firstcellInSelectedSquareX = Math.ceil((this.selectedCell.x + 1) / 3)
-            const firstcellInSelectedSquareY = Math.ceil((this.selectedCell.y + 1) / 3)
+        numberAlreadyInCurrentSquare(x, y) {
+            const firstNumberAlreadyInCurrentSquareX = Math.ceil((this.selectedCell.x + 1) / 3)
+            const firstNumberAlreadyInCurrentSquareY = Math.ceil((this.selectedCell.y + 1) / 3)
             
             const firstInCandidateSquareX = Math.ceil((x + 1) / 3)
             const firstInCandidateSquareY = Math.ceil((y + 1) / 3)
 
-            return firstcellInSelectedSquareX == firstInCandidateSquareX && firstcellInSelectedSquareY == firstInCandidateSquareY
+            return firstNumberAlreadyInCurrentSquareX == firstInCandidateSquareX && firstNumberAlreadyInCurrentSquareY == firstInCandidateSquareY
         },
 
         cellContentSameAsSelected(x, y) {
@@ -89,7 +89,7 @@ export default {
             return this.startBoard.board[y][x] == 0
         },
 
-        isCellValid(x, y) {
+        callValid(x, y) {
             const numberToCheck = this.game.board[y][x]
 
             if (numberToCheck == 0) return true
@@ -131,10 +131,6 @@ export default {
     },
 
     computed: {
-        backgroundImageUrlEnclosed() {
-            return "url(\"" + this.backgroundImageUrl + "\")"
-        },
-
         countInstances() {
             let instances = [0,0,0,0,0,0,0,0,0,0]
             for (const row in this.game.board) {
@@ -155,15 +151,15 @@ export default {
 </script>
 
 <template>
-    <header :style="{'background-image': backgroundImageUrlEnclosed}">
+    <header :style="{'background-image': backgroundImageUrl}">
         <span class="header-text">Vuedoku</span>
     </header>
 
-    <loading v-if="!loaded">
+    <div id="loading" v-if="!loaded">
         <div class="loader"></div>
-    </loading>
+    </div>
 
-    <menubar v-if="loaded">
+    <div id="menubar" v-if="loaded">
         <div id="controls">
             <div class="controls-button" @click="fetchGetNewPuzzle()">
                 New puzzle
@@ -173,7 +169,7 @@ export default {
                 Reset puzzle
             </div>
         </div>
-    </menubar>
+    </div>
 
     <main v-if="loaded">
         <div class="board-container">
@@ -184,10 +180,11 @@ export default {
                         class="board-cell d-flex justify-content-center align-items-center"
                         :class="{
                             'selected': (selectedCell.x == x && selectedCell.y == y),
-                            'relevant-line': (cellInSelectedRow(x) || cellInSelectedCol(y)),
-                            'relevant-square': (cellInSelectedSquare(x, y)),
+                            'relevant-line': (numberAlreadyInRow(x) || numberAlreadyInCol(y)),
+                            'relevant-square': (numberAlreadyInCurrentSquare(x, y)),
                             'samesies': (cellContentSameAsSelected(x, y)),
-                            'warning': (!isCellValid(x, y))
+                            'warning': (!callValid(x, y)),
+                            'user-entered': (cellEditable(x, y))
                         }"
                         v-for="(cell, x) in row"
                         @click="selectedCell = {x: x, y: y}"
@@ -285,6 +282,11 @@ main {
     background-color: rgb(203, 237, 203);
 }
 
+.user-entered {
+    font-weight: 400;
+    color: blue;
+}
+
 .relevant-square {
     background-color: rgb(240, 240, 240);
 }
@@ -336,7 +338,7 @@ main {
     width: 10.2em;
 }
 
-menubar {
+#menubar {
  display: flex;
  justify-content: center;
  margin-bottom: 0.25em;
@@ -355,7 +357,7 @@ menubar {
     margin: 0.25em;
 }
 
-loading {
+#loading {
     display: flex;
     justify-content: center;
     align-items: center;
