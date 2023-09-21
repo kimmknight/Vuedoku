@@ -4,7 +4,7 @@ export default {
 
     data() {
         return {
-            backgroundImageUrl: "url(https://source.unsplash.com/random/?ocean)",
+            backgroundImageUrl: "url(https://source.unsplash.com/random/?forest)",
             game: {},
             loaded: false,
             intitalGame: {
@@ -198,7 +198,7 @@ export default {
         </div>
     </div>
 
-    <main v-if="loaded">
+    <main v-if="loaded" :class="{'win-background': countInstances[0] == 0}">
         <div class="board-container">
     
             <div id="grid-container" class="d-flex flex-column">
@@ -231,7 +231,7 @@ export default {
                         <span class="input-button-count">{{ 9 - countInstances[index] }}</span>
                     </div>
                 </div>
-                <div class="input-button clear-button" @click="enterInSelectedCell(0)">
+                <div class="input-button clear-button" @click="enterInSelectedCell(0)" :class="{'input-button-disabled': !cellEditable(selectedCell.x, selectedCell.y)}">
                     Clear
                 </div>
             </div>
@@ -267,6 +267,10 @@ main {
     justify-content: center;
     align-items: center;
 }
+
+.win-background {
+    background-color: green;
+}
 .board-container {
     display: flex;
     justify-content: center;
@@ -287,6 +291,7 @@ main {
 .board-cell {
     display: flex;
     color: rgb(85, 85, 85);
+    background-color: white;
     justify-content: center;
     align-items: center;
     width: 10vw;
@@ -361,6 +366,7 @@ main {
     border-radius: 0.25em;
     cursor: pointer;
     position: relative;
+    background-color: white;
 }
 
 .input-button:hover {
@@ -386,7 +392,7 @@ main {
 #menubar {
  display: flex;
  justify-content: center;
- margin-bottom: 0.25em;
+ margin-bottom: 0.5em;
 }
 
 #controls {
