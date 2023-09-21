@@ -222,15 +222,18 @@ export default {
             </div>
     
         </div>
-        <div id="input-container">  <!-- v-show="cellEditable(selectedCell.x, selectedCell.y)" -->
-            <div v-for="index in 9">
-                <div class="input-button" @click="enterInSelectedCell(index)" :class="{'input-button-disabled': countInstances[index] >= 9}">
-                    {{ index }}
-                    <span class="input-button-count">{{ 9 - countInstances[index] }}</span>
+        <div id="input-area">
+            <b>Remaining: {{ countInstances[0] }}</b>
+            <div id="input-container">  <!-- v-show="cellEditable(selectedCell.x, selectedCell.y)" -->
+                <div v-for="index in 9">
+                    <div class="input-button" @click="enterInSelectedCell(index)" :class="{'input-button-disabled': countInstances[index] >= 9}">
+                        {{ index }}
+                        <span class="input-button-count">{{ 9 - countInstances[index] }}</span>
+                    </div>
                 </div>
-            </div>
-            <div class="input-button clear-button" @click="enterInSelectedCell(0)">
-                Clear
+                <div class="input-button clear-button" @click="enterInSelectedCell(0)">
+                    Clear
+                </div>
             </div>
         </div>
     </main>
@@ -331,6 +334,10 @@ main {
 
 .selected {
     background-color: lightgreen;
+}
+
+#input-area {
+    text-align: center;
 }
 
 #input-container {
