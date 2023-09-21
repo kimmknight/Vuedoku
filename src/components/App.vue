@@ -7,7 +7,7 @@ export default {
             backgroundImageUrl: "url(https://source.unsplash.com/random/?ocean)",
             game: {},
             loaded: false,
-            startBoard: {
+            intitalGame: {
                 board: [
                     [ 4, 2, 0, 0, 3, 0, 1, 0, 7 ],
                     [ 3, 0, 5, 6, 0, 8, 0, 0, 2 ],
@@ -46,16 +46,16 @@ export default {
             fetch("https://sudoku-api.vercel.app/api/dosuku")
                 .then( (httpResponse) => httpResponse.json() )
                 .then( (responseData) => {
-                     this.startBoard.board = responseData.newboard.grids[0].value
-                     this.startBoard.solution = responseData.newboard.grids[0].solution
-                     this.startBoard.difficulty = responseData.newboard.grids[0].difficulty
-                     this.game = this.deepCopy(this.startBoard)
+                     this.intitalGame.board = responseData.newboard.grids[0].value
+                     this.intitalGame.solution = responseData.newboard.grids[0].solution
+                     this.intitalGame.difficulty = responseData.newboard.grids[0].difficulty
+                     this.game = this.deepCopy(this.intitalGame)
                      this.loaded = true
                     } )
         },
 
         resetPuzzle() {
-            this.game.board = this.deepCopy(this.startBoard.board)
+            this.game.board = this.deepCopy(this.intitalGame.board)
         },
 
         numberAlreadyInRow(x) {
@@ -86,7 +86,7 @@ export default {
         },
 
         cellEditable(x, y) {
-            return this.startBoard.board[y][x] == 0
+            return this.intitalGame.board[y][x] == 0
         },
 
         callValid(x, y) {
@@ -127,7 +127,27 @@ export default {
             if (this.cellEditable(this.selectedCell.x, this.selectedCell.y)) {
                 this.game.board[this.selectedCell.y][this.selectedCell.x] = value
             }
+        },
+
+        localStorageLoad(alternativeFunction) {
+            const storedDataJSON = localStorage.getItem("vuedoku-state")
+            if (storedDataJSON) {
+                const storedData = JSON.parse(storedDataJSON)
+                this.game = storedData.game
+                this.intitalGame = storedData.intitalGame
+                this.loaded = true
+            } else {
+                console.log("Puzzle not present in local storage. Fetching new puzzle.")
+                alternativeFunction()
+            }
+        },
+        
+        localStorageSave() {
+            localStorage.setItem("vuedoku-state", JSON.stringify(
+                { game: this.game, intitalGame: this.intitalGame }
+            ))
         }
+
     },
 
     computed: {
@@ -143,9 +163,16 @@ export default {
         }
     },
 
+    watch: {
+        game: {
+            handler(newValue, oldValue) {
+                this.localStorageSave()
+            }, deep: true
+        }
+    },
+
     mounted() {
-        // this.game = this.deepCopy(this.startBoard);
-        this.fetchGetNewPuzzle()
+        this.localStorageLoad(() => {this.fetchGetNewPuzzle()})
     }
 }
 </script>
