@@ -1,7 +1,9 @@
 <script>
 
-export default {
+import NotesTile from "./NotesTile.vue"
 
+export default {
+    components: [NotesTile],
     data() {
         return {
             backgroundImageUrl: "url(https://source.unsplash.com/random/?forest)",
@@ -9,171 +11,195 @@ export default {
             loaded: false,
             intitalGame: {
                 board: [
-                    [ 4, 2, 0, 0, 3, 0, 1, 0, 7 ],
-                    [ 3, 0, 5, 6, 0, 8, 0, 0, 2 ],
-                    [ 0, 0, 0, 0, 7, 2, 0, 6, 5 ],
-                    [ 0, 6, 9, 8, 0, 0, 0, 0, 3 ],
-                    [ 7, 1, 0, 2, 0, 0, 4, 9, 6 ],
-                    [ 0, 0, 3, 9, 6, 0, 0, 2, 0 ],
-                    [ 0, 0, 0, 0, 2, 4, 8, 0, 0 ],
-                    [ 1, 0, 0, 7, 8, 0, 6, 0, 0 ],
-                    [ 0, 5, 4, 0, 0, 0, 0, 0, 1 ]
+                    [4, 2, 0, 0, 3, 0, 1, 0, 7],
+                    [3, 0, 5, 6, 0, 8, 0, 0, 2],
+                    [0, 0, 0, 0, 7, 2, 0, 6, 5],
+                    [0, 6, 9, 8, 0, 0, 0, 0, 3],
+                    [7, 1, 0, 2, 0, 0, 4, 9, 6],
+                    [0, 0, 3, 9, 6, 0, 0, 2, 0],
+                    [0, 0, 0, 0, 2, 4, 8, 0, 0],
+                    [1, 0, 0, 7, 8, 0, 6, 0, 0],
+                    [0, 5, 4, 0, 0, 0, 0, 0, 1]
                 ],
                 solution: [
-                    [ 4, 2, 6, 5, 3, 9, 1, 8, 7 ],
-                    [ 3, 7, 5, 6, 1, 8, 9, 4, 2 ],
-                    [ 9, 8, 1, 4, 7, 2, 3, 6, 5 ],
-                    [ 2, 6, 9, 8, 4, 7, 5, 1, 3 ],
-                    [ 7, 1, 8, 2, 5, 3, 4, 9, 6 ],
-                    [ 5, 4, 3, 9, 6, 1, 7, 2, 8 ],
-                    [ 6, 3, 7, 1, 2, 4, 8, 5, 9 ],
-                    [ 1, 9, 2, 7, 8, 5, 6, 3, 4 ],
-                    [ 8, 5, 4, 3, 9, 6, 2, 7, 1 ]
+                    [4, 2, 6, 5, 3, 9, 1, 8, 7],
+                    [3, 7, 5, 6, 1, 8, 9, 4, 2],
+                    [9, 8, 1, 4, 7, 2, 3, 6, 5],
+                    [2, 6, 9, 8, 4, 7, 5, 1, 3],
+                    [7, 1, 8, 2, 5, 3, 4, 9, 6],
+                    [5, 4, 3, 9, 6, 1, 7, 2, 8],
+                    [6, 3, 7, 1, 2, 4, 8, 5, 9],
+                    [1, 9, 2, 7, 8, 5, 6, 3, 4],
+                    [8, 5, 4, 3, 9, 6, 2, 7, 1]
                 ],
-                difficulty: "Easy"
+                notes: [
+                    [
+                        [false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],
+                    ],
+                    [
+                        [false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],
+                    ],
+                    [
+                        [false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],
+                    ],[
+                        [false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],
+                    ],[
+                        [false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],
+                    ],[
+                        [false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],
+                    ],[
+                        [false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],
+                    ],[
+                        [false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],
+                    ],[
+                        [false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],[false, false, false, false, false, false, false, false, false],
+                    ],
+                ],
+                difficulty: "Easy",
+                notesMode: false
             },
-            selectedCell: {x: 0, y: 0}
-        }
+            selectedCell: { x: 0, y: 0 }
+        };
     },
-
     methods: {
         deepCopy(arr) {
-            return JSON.parse(JSON.stringify(arr))
+            return JSON.parse(JSON.stringify(arr));
         },
-
         fetchGetNewPuzzle() {
-            this.loaded = false
+            this.loaded = false;
             fetch("https://sudoku-api.vercel.app/api/dosuku")
-                .then( (httpResponse) => httpResponse.json() )
-                .then( (responseData) => {
-                     this.intitalGame.board = responseData.newboard.grids[0].value
-                     this.intitalGame.solution = responseData.newboard.grids[0].solution
-                     this.intitalGame.difficulty = responseData.newboard.grids[0].difficulty
-                     this.game = this.deepCopy(this.intitalGame)
-                     this.loaded = true
-                    } )
+                .then((httpResponse) => httpResponse.json())
+                .then((responseData) => {
+                this.intitalGame.board = responseData.newboard.grids[0].value;
+                this.intitalGame.solution = responseData.newboard.grids[0].solution;
+                this.intitalGame.difficulty = responseData.newboard.grids[0].difficulty;
+                this.game = this.deepCopy(this.intitalGame);
+                this.loaded = true;
+            });
         },
-
         resetPuzzle() {
-            this.game.board = this.deepCopy(this.intitalGame.board)
+            this.game.board = this.deepCopy(this.intitalGame.board);
         },
-
         numberAlreadyInRow(x) {
-            return x == this.selectedCell.x
+            return x == this.selectedCell.x;
         },
-
-
         numberAlreadyInCol(y) {
-            return y == this.selectedCell.y
+            return y == this.selectedCell.y;
         },
-
         numberAlreadyInCurrentSquare(x, y) {
-            const firstNumberAlreadyInCurrentSquareX = Math.ceil((this.selectedCell.x + 1) / 3)
-            const firstNumberAlreadyInCurrentSquareY = Math.ceil((this.selectedCell.y + 1) / 3)
-            
-            const firstInCandidateSquareX = Math.ceil((x + 1) / 3)
-            const firstInCandidateSquareY = Math.ceil((y + 1) / 3)
-
-            return firstNumberAlreadyInCurrentSquareX == firstInCandidateSquareX && firstNumberAlreadyInCurrentSquareY == firstInCandidateSquareY
+            const firstNumberAlreadyInCurrentSquareX = Math.ceil((this.selectedCell.x + 1) / 3);
+            const firstNumberAlreadyInCurrentSquareY = Math.ceil((this.selectedCell.y + 1) / 3);
+            const firstInCandidateSquareX = Math.ceil((x + 1) / 3);
+            const firstInCandidateSquareY = Math.ceil((y + 1) / 3);
+            return firstNumberAlreadyInCurrentSquareX == firstInCandidateSquareX && firstNumberAlreadyInCurrentSquareY == firstInCandidateSquareY;
         },
-
         cellContentSameAsSelected(x, y) {
-            return this.game.board[y][x] > 0 && this.game.board[y][x] == this.game.board[this.selectedCell.y][this.selectedCell.x]
+            return this.game.board[y][x] > 0 && this.game.board[y][x] == this.game.board[this.selectedCell.y][this.selectedCell.x];
         },
-
         cellContentAlreadyInLine(x, y) {
-
         },
-
         cellEditable(x, y) {
-            return this.intitalGame.board[y][x] == 0
+            return this.intitalGame.board[y][x] == 0;
         },
-
         callValid(x, y) {
-            const numberToCheck = this.game.board[y][x]
-
-            if (numberToCheck == 0) return true
-
+            const numberToCheck = this.game.board[y][x];
+            if (numberToCheck == 0)
+                return true;
             for (const col in this.game.board[y]) {
-                const value = this.game.board[y][col]
-                if ( col != x && value == numberToCheck ) {
-                    return false
+                const value = this.game.board[y][col];
+                if (col != x && value == numberToCheck) {
+                    return false;
                 }
             }
-
             for (const row in this.game.board) {
-                const value = this.game.board[row][x]
+                const value = this.game.board[row][x];
                 if (row != y && value == numberToCheck) {
-                    return false
+                    return false;
                 }
             }
-
-            const sqStartx = Math.floor(x / 3) * 3
-            const sqStarty = Math.floor(y / 3) * 3
-
+            const sqStartx = Math.floor(x / 3) * 3;
+            const sqStarty = Math.floor(y / 3) * 3;
             for (let row = sqStarty; row <= sqStarty + 2; row++) {
                 for (let col = sqStartx; col <= sqStartx + 2; col++) {
-                    const value = this.game.board[row][col]
-                    if ( (row != y && col != x) && value == numberToCheck) {
-                        return false
+                    const value = this.game.board[row][col];
+                    if ((row != y && col != x) && value == numberToCheck) {
+                        return false;
                     }
                 }
             }
-            
-            return true
+            return true;
+        },
+
+        cellSelected(x, y) {
+            return this.selectedCell.x == x && this.selectedCell.y == y
         },
 
         enterInSelectedCell(value) {
             if (this.cellEditable(this.selectedCell.x, this.selectedCell.y)) {
-                this.game.board[this.selectedCell.y][this.selectedCell.x] = value
+                this.game.board[this.selectedCell.y][this.selectedCell.x] = value;
+            }
+        },
+
+        toggleNoteInSelectedCell(value) {
+            this.game.notes[this.selectedCell.y][this.selectedCell.x][value - 1] = !this.game.notes[this.selectedCell.y][this.selectedCell.x][value - 1]
+        },
+
+        clearNotesInSelectedCell() {
+            for (const number in this.game.notes[this.selectedCell.y][this.selectedCell.x]) {
+                this.game.notes[this.selectedCell.y][this.selectedCell.x][number] = false
+            }
+        },
+
+        clearAllNotes() {
+            for (const row in this.game.notes) {
+                for (const col in this.game.notes[row]) {
+                    for (const number in this.game.notes[row][col]) {
+                        this.game.notes[row][col][number] = false
+                    }
+                }
             }
         },
 
         localStorageLoad(alternativeFunction) {
-            const storedDataJSON = localStorage.getItem("vuedoku-state")
+            const storedDataJSON = localStorage.getItem("vuedoku-state");
             if (storedDataJSON) {
-                const storedData = JSON.parse(storedDataJSON)
-                this.game = storedData.game
-                this.intitalGame = storedData.intitalGame
-                this.loaded = true
-            } else {
-                console.log("Puzzle not present in local storage. Fetching new puzzle.")
-                alternativeFunction()
+                const storedData = JSON.parse(storedDataJSON);
+                this.game = storedData.game;
+                this.intitalGame = storedData.intitalGame;
+                this.loaded = true;
+            }
+            else {
+                console.log("Puzzle not present in local storage. Fetching new puzzle.");
+                alternativeFunction();
             }
         },
-        
         localStorageSave() {
-            localStorage.setItem("vuedoku-state", JSON.stringify(
-                { game: this.game, intitalGame: this.intitalGame }
-            ))
+            localStorage.setItem("vuedoku-state", JSON.stringify({ game: this.game, intitalGame: this.intitalGame }));
         }
-
     },
-
     computed: {
         countInstances() {
-            let instances = [0,0,0,0,0,0,0,0,0,0]
+            let instances = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             for (const row in this.game.board) {
                 for (const col in this.game.board[row]) {
-                    instances[this.game.board[row][col]] += 1
+                    instances[this.game.board[row][col]] += 1;
                     // boardString += String(this.game.board[row, col])
                 }
             }
-            return instances
+            return instances;
         }
     },
-
     watch: {
         game: {
             handler(newValue, oldValue) {
-                this.localStorageSave()
+                this.localStorageSave();
             }, deep: true
         }
     },
-
     mounted() {
-        this.localStorageLoad(() => {this.fetchGetNewPuzzle()})
-    }
+        this.localStorageLoad(() => { this.fetchGetNewPuzzle(); });
+    },
+    components: { NotesTile }
 }
 </script>
 
@@ -206,7 +232,7 @@ export default {
                     <div
                         class="board-cell d-flex justify-content-center align-items-center"
                         :class="{
-                            'selected': (selectedCell.x == x && selectedCell.y == y),
+                            'selected': (cellSelected(x, y)),
                             'relevant-line': (numberAlreadyInRow(x) || numberAlreadyInCol(y)),
                             'relevant-square': (numberAlreadyInCurrentSquare(x, y)),
                             'samesies': (cellContentSameAsSelected(x, y)),
@@ -216,15 +242,22 @@ export default {
                         v-for="(cell, x) in row"
                         @click="selectedCell = {x: x, y: y}"
                     >
-                        <span v-show="!game.board[y][x] == 0">{{ game.board[y][x] }}</span>
+                        <span v-if="!game.board[y][x] == 0">{{ game.board[y][x] }}</span>
+                        <NotesTile v-else :selected="cellSelected(x, y)" :notes="game.notes[y][x]" @updated="(notes) => {game.notes[y][x] = notes}" />
                     </div>
                 </div>
             </div>
     
         </div>
         <div id="input-area">
-            <b>Remaining: {{ countInstances[0] }}</b>
-            <div id="input-container">  <!-- v-show="cellEditable(selectedCell.x, selectedCell.y)" -->
+            <div id="remaining-numbers"><b>Remaining: {{ countInstances[0] }}</b></div>
+
+            <div>
+                <input id="notes-checkbox" type="checkbox" v-model="game.notesMode" /><label for="notes-checkbox">Notes</label>
+            </div>
+
+            <div class="input-container" v-if="!game.notesMode">
+    
                 <div v-for="index in 9">
                     <div class="input-button" @click="enterInSelectedCell(index)" :class="{'input-button-disabled': countInstances[index] >= 9}">
                         {{ index }}
@@ -233,6 +266,21 @@ export default {
                 </div>
                 <div class="input-button clear-button" @click="enterInSelectedCell(0)" :class="{'input-button-disabled': !cellEditable(selectedCell.x, selectedCell.y)}">
                     Clear
+                </div>
+            </div>
+            
+            <div class="input-container" v-else>
+    
+                <div v-for="index in 9">
+                    <div class="input-button input-button-notes" @click="toggleNoteInSelectedCell(index)" :class="{'input-button-disabled': countInstances[index] >= 9}">
+                        {{ index }}
+                    </div>
+                </div>
+                <div class="input-button input-button-notes clear-button" @click="clearNotesInSelectedCell()" v-if="cellEditable(selectedCell.x, selectedCell.y)">
+                    Clear
+                </div>
+                <div class="input-button input-button-notes clear-button" @click="clearAllNotes()">
+                    Clear all notes
                 </div>
             </div>
         </div>
@@ -266,6 +314,7 @@ main {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    padding: 1em;
 }
 
 .win-background {
@@ -304,7 +353,8 @@ main {
 }
 
 .board-cell:hover {
-    background-color: lightyellow;
+    /* background-color: lightgreen; */
+    box-shadow: inset 0px 0px 0px 1px blue;
 }
 
 .board-cell:nth-child(9n+1) {
@@ -345,7 +395,11 @@ main {
     text-align: center;
 }
 
-#input-container {
+#remaining-numbers {
+    margin-bottom: 1em;
+}
+
+.input-container {
     margin: 2vw;
     display: flex;
     flex-wrap: wrap;
@@ -383,6 +437,10 @@ main {
     position: absolute;
     bottom: 0.3em;
     right: 0.3em;
+}
+
+.input-button-notes {
+    color: grey;
 }
 
 .clear-button {
