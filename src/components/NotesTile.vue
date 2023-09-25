@@ -52,7 +52,8 @@ export default {
 
     padding: 0.2em;
 
-    font-size: 0.8em;
+    user-select: none;
+    font-size: 0.6em;
     color: grey;
 
     display: flex;
@@ -83,7 +84,9 @@ export default {
     text-align: right;
 }
 
-.tilenotes-row>div:hover {
+.selected .tilenotes-row>div:hover {
+    color: blue;
+    font-weight: 600;
     opacity: 100%;
 }
 

@@ -206,23 +206,24 @@ export default {
 <template>
     <header :style="{'background-image': backgroundImageUrl}">
         <span class="header-text">Vuedoku</span>
+        
+        <div id="menubar" :class="{invisible: !loaded}">
+            <div id="controls">
+                <div class="controls-button" @click="fetchGetNewPuzzle()">
+                    New puzzle
+                </div>
+                <div class="difficulty">{{ game.difficulty }}</div>
+                <div class="controls-button" @click="resetPuzzle()">
+                    Reset puzzle
+                </div>
+            </div>
+        </div>
     </header>
 
     <div id="loading" v-if="!loaded">
         <div class="loader"></div>
     </div>
 
-    <div id="menubar" v-if="loaded">
-        <div id="controls">
-            <div class="controls-button" @click="fetchGetNewPuzzle()">
-                New puzzle
-            </div>
-            <div class="difficulty">{{ game.difficulty }}</div>
-            <div class="controls-button" @click="resetPuzzle()">
-                Reset puzzle
-            </div>
-        </div>
-    </div>
 
     <main v-if="loaded" :class="{'win-background': countInstances[0] == 0}">
         <div class="board-container">
@@ -248,11 +249,12 @@ export default {
                 </div>
             </div>
     
+            <div id="remaining-numbers"><b>Remaining: {{ countInstances[0] }}</b></div>
         </div>
         <div id="input-area">
-            <div id="remaining-numbers"><b>Remaining: {{ countInstances[0] }}</b></div>
+            
 
-            <div>
+            <div class="notes-checkbox-container">
                 <input id="notes-checkbox" type="checkbox" v-model="game.notesMode" /><label for="notes-checkbox">Notes</label>
             </div>
 
@@ -264,7 +266,7 @@ export default {
                         <span class="input-button-count">{{ 9 - countInstances[index] }}</span>
                     </div>
                 </div>
-                <div class="input-button clear-button" @click="enterInSelectedCell(0)" :class="{'input-button-disabled': !cellEditable(selectedCell.x, selectedCell.y)}">
+                <div class="input-button clear-button" @click="enterInSelectedCell(0)" :class="{'input-button-disabled': !cellEditable(selectedCell.x, selectedCell.y) || game.board[selectedCell.y][selectedCell.x] == 0}" >
                     Clear
                 </div>
             </div>
@@ -291,8 +293,7 @@ export default {
 
 header {
     padding-top: 2em;
-    padding-bottom: 2em;
-    margin-bottom: 0.5em;
+    padding-bottom: 1em;
     text-align: center;
     background-color: white;
     background-position: center;
@@ -301,7 +302,7 @@ header {
     border-bottom: 1px solid #5c5c5c;
 }
 .header-text {
-    font-size: calc(1.625rem + 4.5vw);
+    font-size: calc(1.625rem + 3vw);
     font-weight: 300;
     letter-spacing: 0px;
     line-height: 1.2;
@@ -314,7 +315,8 @@ main {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    padding: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .win-background {
@@ -323,7 +325,9 @@ main {
 .board-container {
     display: flex;
     justify-content: center;
-    margin: 2vw;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 5vh;
 }
 .board-row {
     display: flex;
@@ -345,9 +349,10 @@ main {
     align-items: center;
     width: 10vw;
     height: 10vw;
-    max-width: 3em;
-    max-height: 3em;
+    max-width: 2.5em;
+    max-height: 2.5em;
     border: 1px solid grey;
+    user-select: none;
     font-weight: 600;
     cursor: pointer;
 }
@@ -371,11 +376,11 @@ main {
 
 .user-entered {
     font-weight: 400;
-    color: blue;
+    color: rgb(0, 0, 220);
 }
 
 .relevant-square {
-    background-color: rgb(240, 240, 240);
+    background-color: rgb(230, 230, 230);
 }
 
 .relevant-line {
@@ -396,17 +401,23 @@ main {
 }
 
 #remaining-numbers {
-    margin-bottom: 1em;
+    margin-top: 1em;
 }
 
 .input-container {
-    margin: 2vw;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    margin-top: 1.5vh;
+    margin-bottom: 1.5vh;
     display: flex;
     flex-wrap: wrap;
     width: 12em;
     height: fit-content;
     justify-content: center;
     align-items: center;
+    border: 1px solid lightgrey;
+    padding: 1em;
+    border-radius: 2%;
 }
 
 .input-button {
@@ -450,7 +461,7 @@ main {
 #menubar {
  display: flex;
  justify-content: center;
- margin-bottom: 0.5em;
+ margin-top: 1.2em;
 }
 
 #controls {
@@ -464,6 +475,8 @@ main {
     font-size: 2em;
     text-align: center;
     margin: 0.25em;
+    color: white;
+    text-shadow: 0px 0px 5px rgba(0,0,0,1);
 }
 
 #loading {
@@ -477,15 +490,34 @@ main {
     justify-content: center;
     align-items: center;
     padding: 0.5em;
-    border: 0.1em solid grey;
+    /* border: 0.1em solid grey; */
     margin: 0.2em;
     border-radius: 0.25em;
     cursor: pointer;
     text-align: center;
+    
+    color: white;
+    text-shadow: 0px 0px 5px rgba(0,0,0,1);
 }
 
 .controls-button:hover {
     background-color: rgb(218, 218, 218);
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+#notes-checkbox {
+    width: 1.2em;
+    height: 1.2em;
+}
+
+.notes-checkbox-container {
+    margin-top: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .loader {
