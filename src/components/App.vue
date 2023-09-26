@@ -6,8 +6,7 @@ export default {
     components: [NotesTile],
     data() {
         return {
-            backgroundImageUrl: "url(https://source.unsplash.com/random/?forest)",
-            game: {},
+            game: {selectedTheme: "Forest"}, //selectedTheme required, otherwise backgroundImageUrl fails
             loaded: false,
             intitalGame: {
                 board: [
@@ -56,11 +55,32 @@ export default {
                     ],
                 ],
                 difficulty: "Easy",
-                notesMode: false
+                notesMode: false,
+                selectedTheme: "Forest"
             },
-            selectedCell: { x: 0, y: 0 }
+            selectedCell: { x: 0, y: 0 },
+            dropdown: {theme: false},
+            themes: ["Forest", "Ocean", "Beach", "Sunset", "Space", "City", "Reef", "Leaves", "Fabric"]
         };
     },
+
+    computed: {
+        countInstances() {
+            let instances = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            for (const row in this.game.board) {
+                for (const col in this.game.board[row]) {
+                    instances[this.game.board[row][col]] += 1;
+                    // boardString += String(this.game.board[row, col])
+                }
+            }
+            return instances;
+        },
+
+        backgroundImageUrl() {
+            return "url(https://source.unsplash.com/random/?" + this.game.selectedTheme.toLowerCase()
+        }
+    },
+
     methods: {
         deepCopy(arr) {
             return JSON.parse(JSON.stringify(arr));
@@ -175,20 +195,14 @@ export default {
         },
         localStorageSave() {
             localStorage.setItem("vuedoku-state", JSON.stringify({ game: this.game, intitalGame: this.intitalGame }));
+        },
+
+        selectTheme(theme) {
+            this.game.selectedTheme = theme
+            this.dropdown.theme = false
         }
     },
-    computed: {
-        countInstances() {
-            let instances = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            for (const row in this.game.board) {
-                for (const col in this.game.board[row]) {
-                    instances[this.game.board[row][col]] += 1;
-                    // boardString += String(this.game.board[row, col])
-                }
-            }
-            return instances;
-        }
-    },
+    
     watch: {
         game: {
             handler(newValue, oldValue) {
@@ -215,6 +229,12 @@ export default {
                 <div class="difficulty">{{ game.difficulty }}</div>
                 <div class="controls-button" @click="resetPuzzle()">
                     Reset puzzle
+                </div>
+                <div class="controls-button theme-button" @click="dropdown.theme = !dropdown.theme">
+                    >
+                </div>
+                <div class="dropdown-content" v-if="dropdown.theme">
+                    <div v-for="theme in themes" class="dropdown-item"><div @click="selectTheme(theme)">{{ theme }}</div></div>
                 </div>
             </div>
         </div>
@@ -300,6 +320,7 @@ header {
     background-size: cover;
     width: 100vw;
     border-bottom: 1px solid #5c5c5c;
+    position: relative;
 }
 .header-text {
     font-size: calc(1.625rem + 3vw);
@@ -483,6 +504,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 6em;
 }
 
 .controls-button {
@@ -527,6 +549,40 @@ main {
   width: 120px;
   height: 120px;
   animation: spin 2s linear infinite;
+}
+
+.dropdown-button {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+}
+
+.dropdown-content {
+    background-color: white;
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    padding: 2em;
+    border: 1px solid grey;
+    border-radius: 3%;
+    max-height: 15em;
+    overflow-y: scroll;
+}
+
+.theme-button {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+} 
+
+.dropdown-item {
+    padding: 1em;
+    cursor: pointer;
+    border-radius: 10%;
+} 
+
+.dropdown-item:hover {
+    background-color: lightgrey;
 }
 
 @keyframes spin {
