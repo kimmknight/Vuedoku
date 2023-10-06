@@ -60,7 +60,24 @@ export default {
             },
             selectedCell: { x: 0, y: 0 },
             dropdown: {theme: false},
-            themes: ["Forest", "Ocean", "Beach", "Sunset", "Space", "City", "Reef", "Leaves", "Fabric"]
+            themes: [
+                "Forest",
+                "Ocean",
+                "Beach",
+                "Sunset",
+                "Space",
+                "City",
+                "Reef",
+                "Leaves",
+                "Fabric",
+                "Macro",
+                "Bokeh",
+                "Art",
+                "Surfing",
+                "Datacenter",
+                "Sudoku",
+                "Colors"
+            ]
         };
     },
 
